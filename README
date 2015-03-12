@@ -1,0 +1,15 @@
+Okay, so this is simple.
+
+1. populate the inventory file with hosts and the username to add like this:
+
+myhost username=myname
+theirhost username=theirname
+theirhost username=myname
+
+2. Add any ssh keys required to the keys directory, one key per file, as myname.pub.
+
+2a. If you want to add a key to all users, stick it in the keys/global/ directory.
+
+3. make
+
+3a. make can take LIMIT= or INVENTORY= arguments

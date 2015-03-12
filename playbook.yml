@@ -1,0 +1,18 @@
+---
+- hosts: all
+  sudo: yes
+  tasks:
+    - name: Create user
+      user: name={{ username }}
+
+    - name: Upload user key
+      authorized_key: user={{ username }}
+                      key="{{ item }}"
+      with_file:
+        - keys/{{ username }}.pub
+
+    - name: Upload global keys
+      authorized_key: user={{ username }}
+                      key="{{ lookup('file', item) }}"
+      with_fileglob:
+        - keys/global/*.pub
