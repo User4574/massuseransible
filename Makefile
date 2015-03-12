@@ -3,10 +3,10 @@ ifdef LIMIT
 endif
 
 ifndef INVENTORY
-	ARGS += -i inventory
-else
-	ARGS += -i $(INVENTORY)
+	INVENTORY = inventory
 endif
 
-all: inventory playbook.yml
+ARGS += -i $(INVENTORY)
+
+all: $(INVENTORY) playbook.yml
 	ansible-playbook playbook.yml $(ARGS)

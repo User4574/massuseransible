@@ -2,22 +2,28 @@
 - hosts: all
   sudo: yes
   tasks:
-    - name: Create user
+    - name: Create user without password
       user: name={{ username }}
+      when: password is not defined
 
-    - name: Check for user key
-      stat: path=keys/{{ username }}.pub
-      register: user_key
+    - name: Hash password if extant
+      local_action: command mkpasswd --method=SHA-512 {{ password }}
+      register: crypted_password
+      when: password is defined
+
+    - name: Create user with password
+      user: name={{ username }}
+            password={{ crypted_password.stdout }}
+      when: crypted_password is defined
 
     - name: Upload user key
       authorized_key: user={{ username }}
-                      key="{{ item }}"
-      when: user_key.stat.exists
-      with_file:
+                      key={{ lookup('file', item) }}
+      with_fileglob:
         - keys/{{ username }}.pub
 
     - name: Upload global keys
       authorized_key: user={{ username }}
-                      key="{{ lookup('file', item) }}"
+                      key={{ lookup('file', item) }}
       with_fileglob:
         - keys/global/*.pub

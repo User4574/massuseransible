@@ -3,7 +3,7 @@ Okay, so this is simple.
 1. populate the inventory file with hosts and the username to add like this:
 
 myhost username=myname
-theirhost username=theirname
+theirhost username=theirname password=somethingsecure
 theirhost username=myname
 
 2. Add any ssh keys required to the keys directory, one key per file, as myname.pub.
