@@ -5,9 +5,14 @@
     - name: Create user
       user: name={{ username }}
 
+    - name: Check for user key
+      stat: path=keys/{{ username }}.pub
+      register: user_key
+
     - name: Upload user key
       authorized_key: user={{ username }}
                       key="{{ item }}"
+      when: user_key.stat.exists
       with_file:
         - keys/{{ username }}.pub
 
